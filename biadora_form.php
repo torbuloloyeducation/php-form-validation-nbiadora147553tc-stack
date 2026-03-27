@@ -1,11 +1,11 @@
 <?php
-// Initialize variables for form fields and errors
+
 $name = $email = $gender = $phone = $website = $password = $confirm_password = "";
 $nameErr = $emailErr = $genderErr = $phoneErr = $websiteErr = $passwordErr = $confirmErr = $termsErr = "";
 $attempts = 0;
 $success = false;
 
-// Helper function to sanitize input
+
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -13,19 +13,19 @@ function test_input($data) {
     return $data;
 }
 
-// Check if form was submitted
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Increment attempt counter (Exercise 5)
+  
     $attempts = isset($_POST['attempts']) ? (int)$_POST['attempts'] + 1 : 1;
     
-    // Validate Name (required)
+    
     if (empty($_POST["name"])) {
         $nameErr = "Name is required";
     } else {
         $name = test_input($_POST["name"]);
     }
     
-    // Validate Email (required)
+
     if (empty($_POST["email"])) {
         $emailErr = "Email is required";
     } else {
@@ -34,15 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $emailErr = "Invalid email format";
         }
     }
-    
-    // Validate Gender (required)
+
     if (empty($_POST["gender"])) {
         $genderErr = "Gender is required";
     } else {
         $gender = test_input($_POST["gender"]);
     }
-    
-    // Exercise 1: Validate Phone Number (required)
+
     if (empty($_POST["phone"])) {
         $phoneErr = "Phone number is required";
     } else {
@@ -51,8 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $phoneErr = "Invalid phone format";
         }
     }
-    
-    // Exercise 2: Validate Website (optional but must be valid URL if provided)
+   
     if (!empty($_POST["website"])) {
         $website = test_input($_POST["website"]);
         if (!filter_var($website, FILTER_VALIDATE_URL)) {
@@ -60,11 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     
-    // Exercise 3: Validate Password and Confirm Password
+ 
     if (empty($_POST["password"])) {
         $passwordErr = "Password is required";
     } else {
-        $password = $_POST["password"]; // Don't sanitize password for storage
+        $password = $_POST["password"]; 
         if (strlen($password) < 8) {
             $passwordErr = "Password must be at least 8 characters";
         }
@@ -79,12 +76,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     
-    // Exercise 4: Validate Terms Checkbox
     if (!isset($_POST["terms"])) {
         $termsErr = "You must agree to the terms and conditions";
     }
-    
-    // If no errors, show success
+   
     if (empty($nameErr) && empty($emailErr) && empty($genderErr) && 
         empty($phoneErr) && empty($websiteErr) && empty($passwordErr) && 
         empty($confirmErr) && empty($termsErr)) {
@@ -117,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <h1>Registration Form</h1>
     
-    <!-- Exercise 5: Display submission attempts -->
+    
     <?php if ($_SERVER["REQUEST_METHOD"] == "POST"): ?>
         <div class="attempts">
             Submission attempt: <?= $attempts ?>
@@ -125,21 +120,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php endif; ?>
     
     <form method="POST" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>">
-        <!-- Name Field -->
+      
         <div class="form-group">
             <label for="name">Name *:</label>
             <input type="text" id="name" name="name" value="<?= $name ?>">
             <div class="error"><?= $nameErr ?></div>
         </div>
         
-        <!-- Email Field -->
         <div class="form-group">
             <label for="email">Email *:</label>
             <input type="email" id="email" name="email" value="<?= $email ?>">
             <div class="error"><?= $emailErr ?></div>
         </div>
         
-        <!-- Gender Field -->
+     
         <div class="form-group">
             <label>Gender *:</label>
             <input type="radio" id="male" name="gender" value="male" <?= $gender == 'male' ? 'checked' : '' ?>>
@@ -151,21 +145,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="error"><?= $genderErr ?></div>
         </div>
         
-        <!-- Exercise 1: Phone Number Field -->
         <div class="form-group">
             <label for="phone">Phone Number *:</label>
             <input type="tel" id="phone" name="phone" value="<?= $phone ?>">
             <div class="error"><?= $phoneErr ?></div>
         </div>
         
-        <!-- Exercise 2: Website Field -->
         <div class="form-group">
             <label for="website">Website (optional):</label>
             <input type="url" id="website" name="website" value="<?= $website ?>">
             <div class="error"><?= $websiteErr ?></div>
         </div>
         
-        <!-- Exercise 3: Password Fields -->
         <div class="form-group">
             <label for="password">Password * (min 8 chars):</label>
             <input type="password" id="password" name="password" value="">
@@ -177,8 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" id="confirm_password" name="confirm_password" value="">
             <div class="error"><?= $confirmErr ?></div>
         </div>
-        
-        <!-- Exercise 4: Terms Checkbox -->
+
         <div class="form-group">
             <label>
                 <input type="checkbox" name="terms" <?= isset($_POST['terms']) ? 'checked' : '' ?>>
@@ -187,7 +177,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="error"><?= $termsErr ?></div>
         </div>
         
-        <!-- Exercise 5: Hidden attempts counter -->
+
         <input type="hidden" name="attempts" value="<?= $attempts ?>">
         
         <button type="submit">Submit</button>
